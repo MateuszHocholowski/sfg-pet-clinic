@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>guru.springframework</groupId>
@@ -10,6 +11,9 @@
     <artifactId>pet-clinic-web</artifactId>
 
     <properties>
+        <webjars-bootstrap.version>5.2.3</webjars-bootstrap.version>
+        <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
+        <libsass.version>0.2.29</libsass.version>
         <maven.compiler.source>20</maven.compiler.source>
         <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,8 +25,8 @@
             <version>0.0.5-SNAPSHOT</version>
         </dependency>
         <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,5 +47,73 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- webjars -->
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${webjars-bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${webjars-font-awesome.version}</version>
+        </dependency>
+        <!-- end of webjars -->
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>css</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <?m2e execute onConfiguration,onIncremental?>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.webjars.npm</groupId>
+                                            <artifactId>bootstrap</artifactId>
+                                            <version>${webjars-bootstrap.version}</version>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${project.build.directory}/webjars</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>com.gitlab.haynes</groupId>
+                        <artifactId>libsass-maven-plugin</artifactId>
+                        <version>${libsass.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <?m2e execute onConfiguration,onIncremental?>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <inputPath>${basedir}/src/main/scss/</inputPath>
+                            <outputPath>${basedir}/src/main/resources/static/resources/css/</outputPath>
+                            <includePath>
+                                ${project.build.directory}/webjars/META-INF/resources/webjars/bootstrap/${webjars-bootstrap.version}/scss/
+                            </includePath>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
