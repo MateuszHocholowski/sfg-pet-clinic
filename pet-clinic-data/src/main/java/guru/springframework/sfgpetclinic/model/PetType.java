@@ -1,7 +1,14 @@
 package guru.springframework.sfgpetclinic.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "TYPES")
 public class PetType extends BaseEntity{
 
+    @Column(name = "name")
     private String name;
 
     public String getName() {
