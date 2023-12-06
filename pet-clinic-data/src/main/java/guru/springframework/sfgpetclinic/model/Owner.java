@@ -1,8 +1,10 @@
 package guru.springframework.sfgpetclinic.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +12,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name = "OWNERS")
 public class Owner extends Person{
@@ -26,7 +28,7 @@ public class Owner extends Person{
     private Set<Pet> pets = new HashSet<>();
 
     @Builder
-    public Owner(@NotEmpty String firstName, @NotEmpty String lastName, String address,
+    public Owner(String firstName, String lastName, String address,
                  String city, String telephone, Set<Pet> pets) {
         super(firstName, lastName);
         this.address = address;
